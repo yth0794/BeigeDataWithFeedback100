@@ -1,0 +1,64 @@
+{
+  "citation": "",
+  "description": "",
+  "features": {
+    "Essay_id": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "Essay_Prompt": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Essay": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Essay_score": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "Overall_score": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "Score_TR": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "Score_CC": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "Score_LR": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "Score_GRA": {
+      "dtype": "int64",
+      "_type": "Value"
+    },
+    "Feedback_TR": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Feedback_CC": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Feedback_LR": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Feedback_GRA": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "Suggestion for improvement": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": ""
+}

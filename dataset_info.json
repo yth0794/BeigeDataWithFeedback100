@@ -1,0 +1,74 @@
+{
+  "dataset_name": "essay_feedback_dataset",
+  "version": "1.0.0",
+  "description": "英语作文评分和反馈数据集",
+  "language": "zh",
+  "task_categories": [
+    "text-classification",
+    "text-generation"
+  ],
+  "features": {
+    "Essay_id": {
+      "dtype": "int64",
+      "description": "作文ID"
+    },
+    "Essay_Prompt": {
+      "dtype": "string",
+      "description": "作文题目"
+    },
+    "Essay": {
+      "dtype": "string",
+      "description": "作文内容"
+    },
+    "Essay_score": {
+      "dtype": "int64",
+      "description": "作文总分"
+    },
+    "Overall_score": {
+      "dtype": "int64",
+      "description": "总体评分"
+    },
+    "Score_TR": {
+      "dtype": "int64",
+      "description": "任务完成度评分"
+    },
+    "Score_CC": {
+      "dtype": "int64",
+      "description": "连贯性评分"
+    },
+    "Score_LR": {
+      "dtype": "int64",
+      "description": "词汇丰富度评分"
+    },
+    "Score_GRA": {
+      "dtype": "int64",
+      "description": "语法准确性评分"
+    },
+    "Feedback_TR": {
+      "dtype": "string",
+      "description": "任务完成度反馈"
+    },
+    "Feedback_CC": {
+      "dtype": "string",
+      "description": "连贯性反馈"
+    },
+    "Feedback_LR": {
+      "dtype": "string",
+      "description": "词汇丰富度反馈"
+    },
+    "Feedback_GRA": {
+      "dtype": "string",
+      "description": "语法准确性反馈"
+    },
+    "Suggestion for improvement": {
+      "dtype": "string",
+      "description": "改进建议"
+    }
+  },
+  "splits": {
+    "train": {
+      "num_examples": 100,
+      "description": "训练集"
+    }
+  }
+}

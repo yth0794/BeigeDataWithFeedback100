@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeigeDataWithFeedback100 - Dataset Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 1px solid #e1e4e8;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #24292e;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn {
+            padding: 6px 12px;
+            border: 1px solid #d1d5da;
+            background: white;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #24292e;
+            transition: all 0.2s;
+        }
+        
+        .btn:hover {
+            background: #f6f8fa;
+            border-color: #d1d5da;
+        }
+        
+        .btn-primary {
+            background: #2ea44f;
+            color: white;
+            border-color: #2ea44f;
+        }
+        
+        .btn-primary:hover {
+            background: #2c974b;
+        }
+        
+        .main-content {
+            display: flex;
+            min-height: calc(100vh - 73px);
+        }
+        
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e1e4e8;
+            padding: 24px;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+        
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #24292e;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5da;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #0366d6;
+            box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.1);
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+        
+        .info-label {
+            color: #586069;
+        }
+        
+        .info-value {
+            font-weight: 500;
+            color: #24292e;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 24px;
+            background: white;
+        }
+        
+        .dataset-info {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f6f8fa;
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+        }
+        
+        .dataset-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #24292e;
+        }
+        
+        .dataset-description {
+            color: #586069;
+            font-size: 14px;
+        }
+        
+        .table-container {
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f6f8fa;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #24292e;
+            border-bottom: 1px solid #e1e4e8;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e1e4e8;
+            vertical-align: top;
+        }
+        
+        .data-table tr:hover {
+            background: #f6f8fa;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .column-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .column-name {
+            font-weight: 600;
+        }
+        
+        .column-type {
+            color: #586069;
+            font-weight: normal;
+        }
+        
+        .sort-icon {
+            color: #d1d5da;
+            cursor: pointer;
+        }
+        
+        .sort-icon:hover {
+            color: #586069;
+        }
+        
+        .text-preview {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .text-preview:hover {
+            white-space: normal;
+            overflow: visible;
+            background: #f6f8fa;
+            padding: 4px;
+            border-radius: 4px;
+        }
+        
+        .score-cell {
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .score-high {
+            color: #28a745;
+        }
+        
+        .score-medium {
+            color: #ffc107;
+        }
+        
+        .score-low {
+            color: #dc3545;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding: 16px;
+        }
+        
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #d1d5da;
+            background: white;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .page-btn:hover {
+            background: #f6f8fa;
+        }
+        
+        .page-btn.active {
+            background: #0366d6;
+            color: white;
+            border-color: #0366d6;
+        }
+        
+        .page-info {
+            margin: 0 16px;
+            color: #586069;
+            font-size: 14px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 48px;
+            color: #586069;
+        }
+        
+        .error {
+            background: #ffeef0;
+            color: #cb2431;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: #f6f8fa;
+            padding: 16px;
+            border-radius: 6px;
+            text-align: center;
+            border: 1px solid #e1e4e8;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0366d6;
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #586069;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e1e4e8;
+            }
+            
+            .data-table {
+                font-size: 12px;
+            }
+            
+            .data-table th,
+            .data-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Dataset Viewer</h1>
+        <div class="header-actions">
+            <a href="https://github.com/yth0794/BeigeDataWithFeedback100" class="btn" target="_blank">GitHub</a>
+            <a href="https://github.com/yth0794/BeigeDataWithFeedback100/tree/main/dataset" class="btn" target="_blank">Dataset Files</a>
+            <a href="https://github.com/yth0794/BeigeDataWithFeedback100" class="btn btn-primary" target="_blank">View Repository</a>
+        </div>
+    </div>
+    
+    <div class="main-content">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dataset Subset</div>
+                <div class="info-item">
+                    <span class="info-label">Subset (1)</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">train</span>
+                    <span class="info-value" id="total-samples">- rows</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Search</div>
+                <input type="text" id="search-input" class="search-box" placeholder="Search this dataset">
+            </div>
+            
+            <div class="sidebar-section">
+                <div class="sidebar-title">Statistics</div>
+                <div class="info-item">
+                    <span class="info-label">Average Score</span>
+                    <span class="info-value" id="avg-score">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Max Score</span>
+                    <span class="info-value" id="max-score">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Min Score</span>
+                    <span class="info-value" id="min-score">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="dataset-info">
+                <div class="dataset-title">BeigeDataWithFeedback100</div>
+                <div class="dataset-description">English essay feedback and scoring dataset compatible with Hugging Face, converted from Excel format.</div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-samples-stat">-</div>
+                    <div class="stat-label">Total Samples</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avg-score-stat">-</div>
+                    <div class="stat-label">Average Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="max-score-stat">-</div>
+                    <div class="stat-label">Max Score</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="min-score-stat">-</div>
+                    <div class="stat-label">Min Score</div>
+                </div>
+            </div>
+            
+            <div id="loading" class="loading">
+                Loading dataset...
+            </div>
+            <div id="error" class="error" style="display: none;">
+                Failed to load dataset. Please check your network connection.
+            </div>
+            <div id="data-container" style="display: none;">
+                <div class="table-container">
+                    <table class="data-table" id="data-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Essay ID</span>
+                                        <span class="column-type">(int64)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Essay Prompt</span>
+                                        <span class="column-type">(string)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Essay</span>
+                                        <span class="column-type">(string)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Essay Score</span>
+                                        <span class="column-type">(int64)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Overall Score</span>
+                                        <span class="column-type">(int64)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Task Response</span>
+                                        <span class="column-type">(int64)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Coherence</span>
+                                        <span class="column-type">(int64)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Lexical Resource</span>
+                                        <span class="column-type">(int64)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="column-header">
+                                        <span class="column-name">Grammar</span>
+                                        <span class="column-type">(int64)</span>
+                                        <span class="sort-icon">↕</span>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination" id="pagination">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allData = [];
+        let filteredData = [];
+        let currentPage = 1;
+        let pageSize = 20;
+        
+        function getScoreClass(score) {
+            if (score >= 6) return 'score-high';
+            if (score >= 5) return 'score-medium';
+            return 'score-low';
+        }
+        
+        function loadData() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const container = document.getElementById('data-container');
+            
+            const dataUrl = 'https://raw.githubusercontent.com/yth0794/BeigeDataWithFeedback100/main/dataset.json';
+            
+            fetch(dataUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    allData = data;
+                    filteredData = [...data];
+                    
+                    loading.style.display = 'none';
+                    container.style.display = 'block';
+                    
+                    updateStats();
+                    renderTable();
+                    setupEventListeners();
+                    
+                    console.log(`✅ Successfully loaded ${data.length} records`);
+                })
+                .catch(err => {
+                    console.error('Failed to load data:', err);
+                    loading.style.display = 'none';
+                    error.style.display = 'block';
+                    error.innerHTML = `Failed to load dataset: ${err.message}<br>Please check your network connection and try again.`;
+                });
+        }
+        
+        function updateStats() {
+            if (allData.length === 0) return;
+            
+            const scores = allData.map(item => item.Essay_score || 0);
+            const avgScore = (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1);
+            const maxScore = Math.max(...scores);
+            const minScore = Math.min(...scores);
+            
+            document.getElementById('total-samples').textContent = `${allData.length} rows`;
+            document.getElementById('total-samples-stat').textContent = allData.length;
+            document.getElementById('avg-score').textContent = avgScore;
+            document.getElementById('avg-score-stat').textContent = avgScore;
+            document.getElementById('max-score').textContent = maxScore;
+            document.getElementById('max-score-stat').textContent = maxScore;
+            document.getElementById('min-score').textContent = minScore;
+            document.getElementById('min-score-stat').textContent = minScore;
+        }
+        
+        function filterData() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            
+            filteredData = allData.filter(item => {
+                return !searchTerm || 
+                    (item.Essay && item.Essay.toLowerCase().includes(searchTerm)) ||
+                    (item.Essay_Prompt && item.Essay_Prompt.toLowerCase().includes(searchTerm)) ||
+                    (item['Suggestion for improvement'] && item['Suggestion for improvement'].toLowerCase().includes(searchTerm));
+            });
+            
+            currentPage = 1;
+            renderTable();
+        }
+        
+        function renderTable() {
+            const tableBody = document.getElementById('table-body');
+            const pagination = document.getElementById('pagination');
+            
+            const startIndex = (currentPage - 1) * pageSize;
+            const endIndex = Math.min(startIndex + pageSize, filteredData.length);
+            const pageData = filteredData.slice(startIndex, endIndex);
+            
+            tableBody.innerHTML = '';
+            
+            pageData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.Essay_id || '-'}</td>
+                    <td class="text-preview" title="${item.Essay_Prompt || ''}">${(item.Essay_Prompt || '').substring(0, 50)}${(item.Essay_Prompt || '').length > 50 ? '...' : ''}</td>
+                    <td class="text-preview" title="${item.Essay || ''}">${(item.Essay || '').substring(0, 100)}${(item.Essay || '').length > 100 ? '...' : ''}</td>
+                    <td class="score-cell ${getScoreClass(item.Essay_score)}">${item.Essay_score || '-'}</td>
+                    <td class="score-cell ${getScoreClass(item.Overall_score)}">${item.Overall_score || '-'}</td>
+                    <td class="score-cell ${getScoreClass(item.Score_TR)}">${item.Score_TR || '-'}</td>
+                    <td class="score-cell ${getScoreClass(item.Score_CC)}">${item.Score_CC || '-'}</td>
+                    <td class="score-cell ${getScoreClass(item.Score_LR)}">${item.Score_LR || '-'}</td>
+                    <td class="score-cell ${getScoreClass(item.Score_GRA)}">${item.Score_GRA || '-'}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            updatePagination();
+        }
+        
+        function updatePagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredData.length / pageSize);
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '';
+            
+            if (currentPage > 1) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage - 1})">Previous</button>`;
+            }
+            
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+            
+            if (startPage > 1) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(1)">1</button>`;
+                if (startPage > 2) {
+                    paginationHTML += `<span>...</span>`;
+                }
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const activeClass = i === currentPage ? 'active' : '';
+                paginationHTML += `<button class="page-btn ${activeClass}" onclick="changePage(${i})">${i}</button>`;
+            }
+            
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    paginationHTML += `<span>...</span>`;
+                }
+                paginationHTML += `<button class="page-btn" onclick="changePage(${totalPages})">${totalPages}</button>`;
+            }
+            
+            if (currentPage < totalPages) {
+                paginationHTML += `<button class="page-btn" onclick="changePage(${currentPage + 1})">Next</button>`;
+            }
+            
+            paginationHTML += `<div class="page-info">Page ${currentPage} of ${totalPages} (${filteredData.length} rows)</div>`;
+            
+            pagination.innerHTML = paginationHTML;
+        }
+        
+        function changePage(page) {
+            currentPage = page;
+            renderTable();
+        }
+        
+        function setupEventListeners() {
+            document.getElementById('search-input').addEventListener('input', filterData);
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
